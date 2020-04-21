@@ -43,6 +43,17 @@ vector<size_t> make_histogram (const vector<double>& numbers, size_t bin_count)
     return foobins;
 }
 
+size_t find_maxinbins(const vector<size_t>& bins)
+{
+    size_t max = bins[0];
+    for (size_t bin:bins)
+    {
+        if(bin > max)
+            max = bin;
+    }
+    return max;
+}
+
 /*
 void show_histogram_text (const vector<size_t>& bins)
 {
@@ -101,10 +112,24 @@ void svg_end()
     cout << "</svg>\n";
 }
 
-void svg_rect(double x, double y, double width, double height, string stroke = "black", string fil = "black")
+void svg_rect(double x, double y, double width, double height, size_t binmax,
+              string stroke = "black", string fil = "black" )
 {
-    cout << "<rect x='" << x <<"' y='" << y << "' width='" << width << "' height='" << height << "' "
+    const int max_width = 400;
+    const int max_ast = max_width - 50;
+    double koeff = 1;
+    if(binmax > max_ast/10.0)
+    {
+        koeff = static_cast <double> (max_ast/10.0)/binmax;
+        cout << "<rect x='" << x <<"' y='" << y << "' width='" << width * koeff << "' height='" << height << "' "
          << "stroke='" << stroke << "' fill='" << fil << "' />";
+
+    }
+    else
+    {
+     cout << "<rect x='" << x <<"' y='" << y << "' width='" << width << "' height='" << height << "' "
+         << "stroke='" << stroke << "' fill='" << fil << "' />";
+    }
 }
 
 void show_histogram_svg(const vector<size_t>& bins)
@@ -116,13 +141,13 @@ void show_histogram_svg(const vector<size_t>& bins)
     const auto TEXT_WIDTH = 50;
     const auto BIN_HEIGHT = 30;
     const auto BLOCK_WIDTH = 10;
+    size_t binmax = find_maxinbins(bins);
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
-
     double top = 0;
     for (size_t bin : bins) {
     const double bin_width = BLOCK_WIDTH * bin;
     svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
-    svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "red");
+    svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, binmax, "red", "#ffeeee");
     top += BIN_HEIGHT;
 }
 
