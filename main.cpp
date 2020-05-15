@@ -5,12 +5,6 @@
 
 using namespace std;
 
-struct Input
-{
-    vector <double> numbers;
-    size_t bin_count;
-};
-
 vector<double> input_numbers(istream& in, size_t count)
 {
     vector<double> result(count);
@@ -75,7 +69,7 @@ int main()
 {
 
     const auto input = read_input(cin);
-    const auto bins = make_histogram(input.numbers, input.bin_count);
+    const auto bins = make_histogram(input);
     if (bins.size() == 0)
     {
         cout << "error";
