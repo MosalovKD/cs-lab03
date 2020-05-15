@@ -5,6 +5,8 @@
 
 using namespace std;
 
+
+
 vector<double> input_numbers(istream& in, size_t count)
 {
     vector<double> result(count);
@@ -14,17 +16,23 @@ vector<double> input_numbers(istream& in, size_t count)
     return result;
 }
 
-Input read_input(istream& in)
+Input read_input(istream& in, bool promt)
 {
     Input data;
-    cerr << "Enter number count: ";
     size_t number_count;
+    size_t bin_count;
+    if(promt == true)
+    {
+    cerr << "Enter number count: ";
     cin >> number_count;
     cerr << "Enter numbers: ";
+    }
     data.numbers = input_numbers(in, number_count);
+    if (promt == true)
+    {
     cerr << "Vvedite kol-vo korzin: ";
-    size_t bin_count;
     cin >> bin_count;
+    }
     data.bin_count = bin_count;
     return data;
 }
@@ -68,7 +76,7 @@ void show_histogram_text (const vector<size_t>& bins)
 int main()
 {
 
-    const auto input = read_input(cin);
+    const auto input = read_input(cin, true);
     const auto bins = make_histogram(input);
     if (bins.size() == 0)
     {
