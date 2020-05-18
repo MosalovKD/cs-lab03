@@ -3,6 +3,7 @@
 #include "histogram.h"
 #include "svg.h"
 #include <curl/curl.h>
+#include <sstream>
 #include <string>
 
 using namespace std;
@@ -39,71 +40,55 @@ Input read_input(istream& in, bool promt)
     return data;
 }
 
-/*
-void show_histogram_text (const vector<size_t>& bins)
+size_t write_data (void* items, size_t item_size, size_t item_count, void* ctx)
 {
-    const size_t max_width = 80;
-    const size_t max_ast = max_width - 4;
-    double koeff = 1;
-    size_t max_count = 0;
-    for(size_t bin:bins)
-    {
-        if(bin > max_count)
-            max_count = bin;
-    }
-    if (max_count > max_ast)
-    {
-        koeff = static_cast <double> (max_ast)/max_count;
-    }
-    for(size_t bin:bins)
-    {
-        if (bin < 10)
-            cout << " " << " ";
-        if (bin >= 10 && bin < 100)
-            cout << " ";
-        if (bin > 100)
-        {
-            cout << "error";
-            break;
-        }
-        cout << bin << "|";
-        size_t height = bin * koeff;
-        for (int i =0; i < height; i++)
-            cout << "*";
-        cout << endl;
-    }
+    size_t data_size = item_size * item_count;
+    stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
+    const char* c_items = reinterpret_cast<const char*>(items);
+    buffer->write(c_items, data_size);
+    return data_size;
 }
-*/
 
-int main(int argc, char* argv[])
+Input download (const string& address)
 {
-    if(argc > 1)
-    {
-        CURL *curl = curl_easy_init();
+       stringstream buffer;
+       curl_global_init(CURL_GLOBAL_ALL);
+       CURL *curl = curl_easy_init();
                if(curl)
                {
                      CURLcode res;
-                     curl_easy_setopt(curl, CURLOPT_URL, argv[1]);
+                     curl_easy_setopt(curl, CURLOPT_URL, address.c_str());
+                     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+                     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
                      res = curl_easy_perform(curl);
                      if (res != 0)
                         {
                           string str = curl_easy_strerror(res);
                           cerr << str;
+                          exit(1);
                         }
-                     curl_easy_cleanup(curl);
-
-                     return 0;
                }
+        curl_easy_cleanup(curl);
+        return read_input(buffer, false);
+}
+
+int main(int argc, char* argv[])
+{
+    Input input;
+    if(argc > 1)
+    {
+       input = download(argv[1]);
     }
-    curl_global_init(CURL_GLOBAL_ALL);
-    const auto input = read_input(cin, true);
+    else
+    {
+        input = read_input(cin, true);
+    }
     const auto bins = make_histogram(input);
     if (bins.size() == 0)
     {
         cout << "error";
         return 0;
     }
-    //show_histogram_text(bins);
     show_histogram_svg(bins);
     return 0;
 }
