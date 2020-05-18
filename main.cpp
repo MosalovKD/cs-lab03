@@ -3,7 +3,7 @@
 #include "histogram.h"
 #include "svg.h"
 #include <curl/curl.h>
-
+#include <string>
 
 using namespace std;
 
@@ -85,7 +85,14 @@ int main(int argc, char* argv[])
                      CURLcode res;
                      curl_easy_setopt(curl, CURLOPT_URL, argv[1]);
                      res = curl_easy_perform(curl);
+                     if (res != 0)
+                        {
+                          string str = curl_easy_strerror(res);
+                          cerr << str;
+                        }
                      curl_easy_cleanup(curl);
+
+                     return 0;
                }
     }
     curl_global_init(CURL_GLOBAL_ALL);
