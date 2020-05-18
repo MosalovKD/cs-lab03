@@ -75,8 +75,14 @@ void show_histogram_text (const vector<size_t>& bins)
 }
 */
 
-int main()
+int main(int argc, char* argv[])
 {
+    if(argc > 1)
+        {
+            cerr << "argc = " << argc << endl;
+            cerr << "argv [0] = " << argv << endl;
+            return 0;
+        }
     curl_global_init(CURL_GLOBAL_ALL);
     const auto input = read_input(cin, true);
     const auto bins = make_histogram(input);
