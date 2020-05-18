@@ -2,6 +2,8 @@
 #include <vector>
 #include "histogram.h"
 #include "svg.h"
+#include <curl/curl.h>
+
 
 using namespace std;
 
@@ -75,7 +77,7 @@ void show_histogram_text (const vector<size_t>& bins)
 
 int main()
 {
-
+    curl_global_init(CURL_GLOBAL_ALL);
     const auto input = read_input(cin, true);
     const auto bins = make_histogram(input);
     if (bins.size() == 0)
