@@ -65,6 +65,9 @@ Input download (const string& address)
                         {
                           string str = curl_easy_strerror(res);
                           cerr << str;
+                          auto* pd = curl_version_info(CURLVERSION_NOW);
+                          auto* p_list = pd->protocols;
+                          cerr << **p_list;
                           exit(1);
                         }
                }
