@@ -6,6 +6,7 @@ struct Input
 {
     vector <double> numbers;
     size_t bin_count;
+    int HIST_WIDTH;
 };
 
 void find_minmax(const vector<double>& numbers, double& min, double& max);

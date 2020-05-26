@@ -31,25 +31,14 @@ void hist_scale (int& HIST_WIDTH, double& BLOCK_WIDTH, const vector<size_t>& bin
     {
         kol_vo_chisel = kol_vo_chisel + bin;
     }
-    cerr << "Vvedite shirinu histogrammi:";
-    cin >> HIST_WIDTH;
-    if (HIST_WIDTH < 70)
-    {
-         cerr << endl << "error: shirina ochen' malen'kaya. Vvedite znachenie ot 70 do 800.";
-         cin >> HIST_WIDTH;
-    }
-    if (HIST_WIDTH > 800)
-    {
-         cerr << endl << "error: shirina slishkom bol'shaya. Vvedite znachenie ot 70 do 800.";
-         cin >> HIST_WIDTH;
-    }
     size_t binmax = find_maxinbins(bins);
     BLOCK_WIDTH = HIST_WIDTH/binmax;
     if (HIST_WIDTH < 1/3.0 * kol_vo_chisel * BLOCK_WIDTH)
     {
-         cerr << endl << "error: shirina ochen' malen'kaya. Vvedite znachenie ot 70 do 800.";
-         cin >> HIST_WIDTH;
-         BLOCK_WIDTH = HIST_WIDTH/binmax;
+         HIST_WIDTH = 1/3.0 * kol_vo_chisel * BLOCK_WIDTH;
+         cerr << endl << "error: shirina ochen' malen'kaya. Vvedite znachenie ot" <<
+         HIST_WIDTH << "do 800.";
+         exit(0);
     }
 }
 
@@ -58,9 +47,9 @@ void svg_end()
     cout << "</svg>\n";
 }
 
-void show_histogram_svg(const vector<size_t>& bins)
+void show_histogram_svg(const vector<size_t>& bins, Input* p_input)
 {
-    int HIST_WIDTH = 0;
+    int HIST_WIDTH = p_input->HIST_WIDTH;;
     double BLOCK_WIDTH; //(koeff)
     size_t binmax = find_maxinbins(bins);
     hist_scale(HIST_WIDTH, BLOCK_WIDTH, bins);

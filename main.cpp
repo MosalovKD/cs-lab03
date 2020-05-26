@@ -24,6 +24,7 @@ Input read_input(istream& in, bool promt)
     Input data;
     size_t number_count;
     size_t bin_count;
+    int HIST_WIDTH;
     if(promt == true)
     {
     cerr << "Enter number count: ";
@@ -37,6 +38,17 @@ Input read_input(istream& in, bool promt)
     cin >> bin_count;
     }
     data.bin_count = bin_count;
+    if (promt == true)
+    {
+    cerr << "Vvedite shirinu histogrammi:";
+    cin >> HIST_WIDTH;
+    if (HIST_WIDTH < 70 || HIST_WIDTH > 800)
+    {
+        cerr << "error: nekorektnaya shirina. Vvedite znachenie ot 70 do 800.";
+        exit(0);
+    }
+    }
+    data.HIST_WIDTH = HIST_WIDTH;
     return data;
 }
 
@@ -92,6 +104,6 @@ int main(int argc, char* argv[])
         cout << "error";
         return 0;
     }
-    show_histogram_svg(bins);
+    show_histogram_svg(bins, &input);
     return 0;
 }

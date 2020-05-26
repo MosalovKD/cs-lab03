@@ -11,6 +11,6 @@ void hist_scale (int& HIST_WIDTH, double& BLOCK_WIDTH, const vector<size_t>& bin
 
 void svg_end();
 
-void show_histogram_svg(const vector<size_t>& bins);
+void show_histogram_svg(const vector<size_t>& bins, Input* p_input);
 
 
