@@ -2,6 +2,7 @@
 #include <vector>
 #include "histogram.h"
 #include "svg.h"
+#include <windows.h>
 
 using namespace std;
 
@@ -14,44 +15,27 @@ vector<double> input_numbers(size_t count)
     return result;
 }
 
-/*
-void show_histogram_text (const vector<size_t>& bins)
-{
-    const size_t max_width = 80;
-    const size_t max_ast = max_width - 4;
-    double koeff = 1;
-    size_t max_count = 0;
-    for(size_t bin:bins)
-    {
-        if(bin > max_count)
-            max_count = bin;
-    }
-    if (max_count > max_ast)
-    {
-        koeff = static_cast <double> (max_ast)/max_count;
-    }
-    for(size_t bin:bins)
-    {
-        if (bin < 10)
-            cout << " " << " ";
-        if (bin >= 10 && bin < 100)
-            cout << " ";
-        if (bin > 100)
-        {
-            cout << "error";
-            break;
-        }
-        cout << bin << "|";
-        size_t height = bin * koeff;
-        for (int i =0; i < height; i++)
-            cout << "*";
-        cout << endl;
-    }
-}
-*/
-
 int main()
 {
+    DWORD info = GetVersion();
+    /*printf("Your version(10) is %u\n", info);
+    printf("Your version(16) is %x\n", info);
+    DWORD mask = 0b00000000'00000000'11111111'11111111;
+    DWORD version = info & mask;
+    printf("Your version(10) is %u\n", version);
+    printf("Your version(16) is %x\n", version);
+    DWORD mask_major = 0x0000ff00;
+    DWORD version_major = version & mask_major;
+    DWORD mask_minor = 0x000000ff;
+    DWORD version_minor = version & mask_minor;
+    printf("Your version(10) is %u %c %u", version_major, '.', version_minor);*/
+    DWORD mask_major = 0x0000ff00;
+    DWORD version_major = info & mask_major;
+    DWORD mask_minor = 0x000000ff;
+    DWORD version_minor = info & mask_minor;
+    printf("Your version is %u %c %u", version_major, '.', version_minor);
+    return 0;
+
     cerr << "Vvedite kol-vo chisel: ";
     size_t number_count;
     cin >> number_count;
@@ -65,7 +49,6 @@ int main()
         cout << "error";
         return 0;
     }
-    //show_histogram_text(bins);
     show_histogram_svg(bins);
     return 0;
 }
