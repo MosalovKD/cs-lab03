@@ -27,36 +27,45 @@ Input read_input(istream& in, bool promt)
     int HIST_WIDTH;
     if(promt == true)
     {
-    cerr << "Enter number count: ";
-    cin >> number_count;
-    cerr << "Enter numbers: ";
-    }
+    cout << "Enter number count: ";
+    in >> number_count;
+    cout << "Enter numbers: ";
     data.numbers = input_numbers(in, number_count);
-    if (promt == true)
-    {
-    cerr << "Vvedite kol-vo korzin: ";
-    cin >> bin_count;
-    }
+    cout << "Vvedite kol-vo korzin: ";
+    in >> bin_count;
     data.bin_count = bin_count;
-    if (promt == true)
-    {
-    cerr << "Vvedite shirinu histogrammi:";
-    cin >> HIST_WIDTH;
+    cout << "Vvedite shirinu histogrammi:";
+    in >> HIST_WIDTH;
     if (HIST_WIDTH < 70 || HIST_WIDTH > 800)
     {
         cerr << "error: nekorektnaya shirina. Vvedite znachenie ot 70 do 800.";
         exit(0);
     }
-    }
     data.HIST_WIDTH = HIST_WIDTH;
+    }
+    else
+    {
+        in >> number_count;
+        data.numbers = input_numbers(in, number_count);
+        in >> bin_count;
+        data.bin_count = bin_count;
+        in >> HIST_WIDTH;
+        if (HIST_WIDTH < 70 || HIST_WIDTH > 800)
+        {
+        cerr << "error: nekorektnaya shirina. Vvedite znachenie ot 70 do 800.";
+        exit(0);
+        }
+        data.HIST_WIDTH = HIST_WIDTH;
+    }
+
     return data;
 }
 
 size_t write_data (void* items, size_t item_size, size_t item_count, void* ctx)
 {
     size_t data_size = item_size * item_count;
-    stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
     const char* c_items = reinterpret_cast<const char*>(items);
+    stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
     buffer->write(c_items, data_size);
     return data_size;
 }
@@ -77,11 +86,17 @@ Input download (const string& address)
                         {
                           string str = curl_easy_strerror(res);
                           cerr << str;
-                          auto* pd = curl_version_info(CURLVERSION_NOW);
-                          auto* p_list = pd->protocols;
-                          cerr << **p_list;
                           exit(1);
                         }
+                     auto pd = curl_version_info(CURLVERSION_NOW);
+                     auto p_list = pd->protocols;
+                     cerr << *p_list;
+                     int i = 1;
+                     while ( *(p_list + i) != NULL)
+                     {
+                         cerr << *(p_list + i) << endl;
+                         i++;
+                     }
                }
         curl_easy_cleanup(curl);
         return read_input(buffer, false);
@@ -101,7 +116,7 @@ int main(int argc, char* argv[])
     const auto bins = make_histogram(input);
     if (bins.size() == 0)
     {
-        cout << "error";
+        cerr << "error";
         return 0;
     }
     show_histogram_svg(bins, &input);

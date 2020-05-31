@@ -11,7 +11,7 @@ struct Input
 
 void find_minmax(const vector<double>& numbers, double& min, double& max);
 
-vector<size_t> make_histogram (Input);
+vector<size_t> make_histogram (Input in);
 
 size_t find_maxinbins(const vector<size_t>& bins);
 
