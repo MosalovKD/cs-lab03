@@ -2,7 +2,7 @@
 #include <vector>
 #include "histogram.h"
 #include "svg.h"
-#include <windows.h>
+#include "info.h"
 
 using namespace std;
 
@@ -17,36 +17,6 @@ vector<double> input_numbers(size_t count)
 
 int main()
 {
-    DWORD info = GetVersion();
-    DWORD build;
-    printf("Info in 10 is %u\n", info);
-    printf("Info in 16 is %x\n", info);
-
-    DWORD mask = 0b00000000'00000000'11111111'11111111;
-    DWORD version = info & mask;
-    printf("Your version in 10 %u\n", version);
-
-    DWORD platform = info >> 16;
-
-    DWORD major_mask = 0x00ff;
-    DWORD version_major = version & major_mask;
-
-    DWORD version_minor = version >> 8;
-
-    if ((info & 0x80000000) == 0)
-    {
-    build = platform;
-    }
-
-    printf("Windows v%u.%u (build %u)\n", version_major, version_minor, build);
-
-    char name[MAX_COMPUTERNAME_LENGTH + 1];
-    DWORD size = MAX_COMPUTERNAME_LENGTH + 1;
-    GetComputerNameA(name, &size);
-    printf("Your computer name is %s\n", name);
-
-    return 0;
-
     cerr << "Vvedite kol-vo chisel: ";
     size_t number_count;
     cin >> number_count;

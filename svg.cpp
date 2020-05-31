@@ -1,5 +1,6 @@
 #include "histogram.h"
 #include "svg.h"
+#include "info.h"
 #include <iostream>
 
 
@@ -21,7 +22,7 @@ void svg_text(double left, double baseline, string text)
 void svg_rect(double x, double y, double width, double height, string stroke = "black", string fil = "black" )
 {
     cout << "<rect x='" << x <<"' y='" << y << "' width='" << width << "' height='" << height << "' "
-         << "stroke='" << stroke << "' fill='" << fil << "' />";
+         << "stroke='" << stroke << "' fill='" << fil << "' />" << endl;
 }
 
 void hist_scale (int& HIST_WIDTH, double& BLOCK_WIDTH, const vector<size_t>& bins) // domashnee zadanie
@@ -83,6 +84,6 @@ void show_histogram_svg(const vector<size_t>& bins)
     svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "red", "#ffeeee");
     top += BIN_HEIGHT;
     }
-
+    svg_text(TEXT_LEFT, top + 20, info_text());
     svg_end();
 }
