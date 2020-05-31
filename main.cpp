@@ -38,7 +38,13 @@ int main()
     build = platform;
     }
 
-    printf("Windows v%u.%u (build %u)", version_major, version_minor, build);
+    printf("Windows v%u.%u (build %u)\n", version_major, version_minor, build);
+
+    char name[MAX_COMPUTERNAME_LENGTH + 1];
+    DWORD size = MAX_COMPUTERNAME_LENGTH + 1;
+    GetComputerNameA(name, &size);
+    printf("Your computer name is %s\n", name);
+
     return 0;
 
     cerr << "Vvedite kol-vo chisel: ";
