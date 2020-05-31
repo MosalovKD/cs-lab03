@@ -18,22 +18,27 @@ vector<double> input_numbers(size_t count)
 int main()
 {
     DWORD info = GetVersion();
-    /*printf("Your version(10) is %u\n", info);
-    printf("Your version(16) is %x\n", info);
+    DWORD build;
+    printf("Info in 10 is %u\n", info);
+    printf("Info in 16 is %x\n", info);
+
     DWORD mask = 0b00000000'00000000'11111111'11111111;
     DWORD version = info & mask;
-    printf("Your version(10) is %u\n", version);
-    printf("Your version(16) is %x\n", version);
-    DWORD mask_major = 0x0000ff00;
-    DWORD version_major = version & mask_major;
-    DWORD mask_minor = 0x000000ff;
-    DWORD version_minor = version & mask_minor;
-    printf("Your version(10) is %u %c %u", version_major, '.', version_minor);*/
-    DWORD mask_major = 0x0000ff00;
-    DWORD version_major = info & mask_major;
-    DWORD mask_minor = 0x000000ff;
-    DWORD version_minor = info & mask_minor;
-    printf("Your version is %u %c %u", version_major, '.', version_minor);
+    printf("Your version in 10 %u\n", version);
+
+    DWORD platform = info >> 16;
+
+    DWORD major_mask = 0x00ff;
+    DWORD version_major = version & major_mask;
+
+    DWORD version_minor = version >> 8;
+
+    if ((info & 0x80000000) == 0)
+    {
+    build = platform;
+    }
+
+    printf("Windows v%u.%u (build %u)", version_major, version_minor, build);
     return 0;
 
     cerr << "Vvedite kol-vo chisel: ";
