@@ -5,6 +5,8 @@
 #include <curl/curl.h>
 #include <sstream>
 #include <string>
+#include "info.h"
+
 
 using namespace std;
 
